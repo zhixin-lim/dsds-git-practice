@@ -7,3 +7,4 @@ testing a new change
 
 version A
 "add code from student A" 
+student B added here: today is a rainy day!
