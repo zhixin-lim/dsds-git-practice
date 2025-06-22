@@ -1,0 +1,12 @@
+# Use the official Rocker Shiny image as the base image
+FROM rocker/r-ver:latest
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the backend files into the container
+COPY backend /app/backend
+
+EXPOSE 3839
+
+

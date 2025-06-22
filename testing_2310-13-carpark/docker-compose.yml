@@ -1,0 +1,19 @@
+services:
+  shiny-ui:
+    build:
+      dockerfile: ui_dockerfile
+    ports:
+      - "3838:3838"
+    depends_on:
+      - shiny-backend
+    volumes:
+      - shared-volume:/srv/shiny-server/backend
+
+  shiny-backend:
+    build:
+      dockerfile: model_dockerfile
+    volumes:
+      - shared-volume:/app/backend
+
+volumes:
+  shared-volume:

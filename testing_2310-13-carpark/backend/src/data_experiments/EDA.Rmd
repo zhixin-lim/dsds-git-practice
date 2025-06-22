@@ -1,0 +1,284 @@
+---
+title: "OptPark EDA"
+date: "2023-10-19"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align = "center", out.width = "75%")
+```
+
+## EDA
+
+```{r, warning=FALSE, results='hide', message=FALSE}
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(stringr)
+library(ggplot2)
+```
+
+```{r}
+df_10 <- read.csv("../data/df_10.csv")
+df_5 <- read.csv("../data/df_5.csv")
+df_6b <- read.csv("../data/df_6b.csv")
+df_4 <- read.csv("../data/df_4.csv")
+df_3 <- read.csv("../data/df_3.csv")
+df_5b <- read.csv("../data/df_5b.csv")
+df_3a <- read.csv("../data/df_3a.csv")
+```
+
+```{r}
+df_3 %>% select("type") %>% table()
+df_3a %>% select("type") %>% table()
+df_4 %>% select("type") %>% table()
+df_5 %>% select("type") %>% table()
+df_5b %>% select("type") %>% table()
+df_6b %>% select("type") %>% table()
+df_10 %>% select("type") %>% table()
+```
+
+```{r}
+# Create bar plots for each data frame to observe the "type" of parkers in each carpark
+barplot_df_3 <- ggplot(df_3, aes(x = type)) +
+  geom_bar() +
+  geom_text(aes(label=..count..),stat="count",nudge_y=2000)+
+  labs(x = "Category", y = "Count") +
+  ggtitle("df_3") +
+  theme_bw()
+
+barplot_df_3a <- ggplot(df_3a, aes(x = type)) +
+  geom_bar() +
+  geom_text(aes(label=..count..),stat="count",nudge_y=2000)+
+  labs(x = "Category", y = "Count") +
+  ggtitle("df_3a") +
+  theme_bw()
+
+barplot_df_4 <- ggplot(df_4, aes(x = type)) +
+  geom_bar() +
+  geom_text(aes(label=..count..),stat="count",nudge_y=2000)+
+  labs(x = "Category", y = "Count") +
+  ggtitle("df_4") +
+  theme_bw()
+
+barplot_df_5 <- ggplot(df_5, aes(x = type)) +
+  geom_bar() +
+  geom_text(aes(label=..count..),stat="count",nudge_y=2000)+
+  labs(x = "Category", y = "Count") +
+  ggtitle("df_5") +
+  theme_bw()
+
+barplot_df_5b <- ggplot(df_5b, aes(x = type)) +
+  geom_bar() +
+  geom_text(aes(label=..count..),stat="count",nudge_y=1000)+
+  labs(x = "Category", y = "Count") +
+  ggtitle("df_5b") +
+  theme_bw()
+
+barplot_df_6b <- ggplot(df_6b, aes(x = type)) +
+  geom_bar() +
+  geom_text(aes(label=..count..),stat="count",nudge_y=1500)+
+  labs(x = "Category", y = "Count") +
+  ggtitle("df_6b") +
+  theme_bw()
+
+barplot_df_10 <- ggplot(df_10, aes(x = type)) +
+  geom_bar() +
+  geom_text(aes(label=..count..),stat="count",nudge_y=10)+
+  labs(x = "Category", y = "Count") +
+  ggtitle("df_10") +
+  theme_bw()
+
+# Print or display the bar plots
+print(barplot_df_3)
+print(barplot_df_3a)
+print(barplot_df_4)
+print(barplot_df_5)
+print(barplot_df_5b)
+print(barplot_df_6b)
+print(barplot_df_10)
+```
+
+```{r}
+# Create boxplots for each data frame
+boxplot_df_3 <- ggplot(df_3, aes(x = type, y = du_val)) +
+  geom_boxplot() +
+  labs(x = "Type", y = "duration") +
+  ggtitle("df_3") +
+  theme_bw()
+
+boxplot_df_3a <- ggplot(df_3a, aes(x = type, y = du_val)) +
+  geom_boxplot() +
+  labs(x = "Type", y = "duration") +
+  ggtitle("df_3a") +
+  theme_bw()
+
+boxplot_df_4 <- ggplot(df_4, aes(x = type, y = du_val)) +
+  geom_boxplot() +
+  labs(x = "Type", y = "duration") +
+  ggtitle("df_4") +
+  theme_bw()
+
+boxplot_df_5 <- ggplot(df_5, aes(x = type, y = du_val)) +
+  geom_boxplot() +
+  labs(x = "Type", y = "duration") +
+  ggtitle("df_5") +
+  theme_bw()
+
+boxplot_df_5b <- ggplot(df_5b, aes(x = type, y = du_val)) +
+  geom_boxplot() +
+  labs(x = "Type", y = "duration") +
+  ggtitle("df_5b") +
+  theme_bw()
+
+boxplot_df_6b <- ggplot(df_6b, aes(x = type, y = du_val)) +
+  geom_boxplot() +
+  labs(x = "Type", y = "duration") +
+  ggtitle("df_6b") +
+  theme_bw()
+
+boxplot_df_10 <- ggplot(df_10, aes(x = type, y = du_val)) +
+  geom_boxplot() +
+  labs(x = "Type", y = "duration") +
+  ggtitle("df_10") +
+  theme_bw()
+
+# Print or display the boxplots
+print(boxplot_df_3)
+print(boxplot_df_3a)
+print(boxplot_df_4)
+print(boxplot_df_5)
+print(boxplot_df_5b)
+print(boxplot_df_6b)
+print(boxplot_df_10)
+```
+
+```{r}
+# Create entry timeline for each data frame, faceted by slot type
+timeline_df_3 <- ggplot(df_3) +
+  geom_line(aes(x = as.Date(enter_time)),stat = "count",color="blue") +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_3") +
+  facet_wrap(~slot, scales = "free_y") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+timeline_df_3a <- ggplot(df_3a) +
+  geom_line(aes(x = as.Date(enter_time)),stat = "count",color="blue") +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_3a") +
+  facet_wrap(~slot, scales = "free_y") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+timeline_df_4 <- ggplot(df_4) +
+  geom_line(aes(x = as.Date(enter_time)),stat = "count",color="blue") +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_4") +
+  facet_wrap(~slot, scales = "free_y") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+timeline_df_5 <- ggplot(df_5) +
+  geom_line(aes(x = as.Date(enter_time)),stat = "count",color="blue") +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_5") +
+  facet_wrap(~slot, scales = "free_y") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+timeline_df_5b <- ggplot(df_5b) +
+  geom_line(aes(x = as.Date(enter_time)),stat = "count",color="blue") +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_5b") +
+  facet_wrap(~slot, scales = "free_y") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+timeline_df_6b <- ggplot(df_6b) +
+  geom_line(aes(x = as.Date(enter_time)),stat = "count",color="blue") +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_6b") +
+  facet_wrap(~slot, scales = "free_y") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+# Print or display the timeline
+print(timeline_df_3)
+print(timeline_df_3a)
+print(timeline_df_4)
+print(timeline_df_5)
+print(timeline_df_5b)
+print(timeline_df_6b)
+```
+
+```{r}
+# Create line plot for each data frame, lines colored according by the slot type
+line_split_df3 <- ggplot(df_3) +
+  geom_line(aes(x = as.Date(enter_time),color = slot),stat = "count") +
+  scale_color_manual(values = c("red", "white")) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_3") +
+  theme_dark() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+line_split_df3a <- ggplot(df_3a) +
+  geom_line(aes(x = as.Date(enter_time),color = slot),stat = "count") +
+  scale_color_manual(values = c("red", "white")) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_3a") +
+  theme_dark() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+line_split_df4 <- ggplot(df_4) +
+  geom_line(aes(x = as.Date(enter_time),color = slot),stat = "count") +
+  scale_color_manual(values = c("red", "white")) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_4") +
+  theme_dark() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+line_split_df5 <- ggplot(df_5) +
+  geom_line(aes(x = as.Date(enter_time),color = slot),stat = "count") +
+  scale_color_manual(values = c("red", "white"))+
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_5") +
+  theme_dark() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+line_split_df5b <- ggplot(df_5b) +
+  geom_line(aes(x = as.Date(enter_time),color = slot),stat = "count") +
+  scale_color_manual(values = c("red", "white")) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_5b") +
+  theme_dark() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+line_split_df6b <- ggplot(df_6b) +
+  geom_line(aes(x = as.Date(enter_time),color = slot),stat = "count") +
+  scale_color_manual(values = c("red", "white")) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month")+
+  labs(x = "Date", y = "Count") +
+  ggtitle("df_6b") +
+  theme_dark() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 0.5))
+
+
+print(line_split_df3)
+print(line_split_df3a)
+print(line_split_df4)
+print(line_split_df5)
+print(line_split_df5b)
+print(line_split_df6b)
+```
