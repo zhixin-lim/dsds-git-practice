@@ -2,7 +2,7 @@
 line1
 line2 
 line3
-print("hello from A") 
+print("hello, this is A") 
 print("hello from B")
 version 1 
 version 2 
