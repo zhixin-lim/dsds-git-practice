@@ -3,7 +3,7 @@ line1
 line2 
 line3
 print("hello, this is A") 
-print("hello from B")
+print("hello, this is B")
 version 1 
 version 2 
 version 3 
